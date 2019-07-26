@@ -1,0 +1,8 @@
+version: '3.5'
+
+services:
+  database1:
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == worker1

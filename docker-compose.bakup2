@@ -2,10 +2,10 @@ version: '3.5'
 
 services:
   web:
-    image: aaroncymor/mywebsite:1.1
-    build: .  
+    image: aaroncymor/website:1.1
+    build: .   
     volumes:
-      - web_volume:/opt/services/app/src
+      - .:/opt/services/app/src
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -47,14 +47,11 @@ services:
 
 networks:
   nginx_network:
-    driver: overlay
+    driver: bridge
   redis_network:
-    driver: overlay
+    driver: bridge
   database1_network:
-    driver: overlay
-    #driver_opts:
-    #  encrypted: "true"
+    driver: bridge
 
 volumes:
-  web_volume:
   database1_volume:

@@ -1,0 +1,21 @@
+version: '3.5'
+
+services:
+  web:
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+          - node.hostname != manager1
+
+  nginx:
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == manager1
+
+  redis:
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == manager1
