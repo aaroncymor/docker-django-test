@@ -2,7 +2,10 @@ version: '3.5'
 
 services:
   web:
+    image: aaroncymor/website:1.0
     build: .
+    command: >
+      bash -c "python manage.py makemigrations app && python manage.py migrate app && gunicorn --bind :8000 djangoproj.wsgi:application"    
     volumes:
       - .:/opt/services/app/src
     environment:

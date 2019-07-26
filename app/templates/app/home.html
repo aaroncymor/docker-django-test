@@ -1,1 +1,11 @@
+
+{% if food %}
+There is food!
+    {% for f in food %}
+        They are: {{f.name}}!!!
+    {% endfor %}
+{% else %}
+There is no food! Im hungry nowww.
+{% endif  %}
+
 Hello world! I have been seen {{ count }} times.

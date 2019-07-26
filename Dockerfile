@@ -9,4 +9,3 @@ WORKDIR /opt/services/app/src
 COPY ./requirements.txt /tmp/
 RUN pip install -r /tmp/requirements.txt
 
-CMD ["gunicorn", "--bind", ":8000", "djangoproj.wsgi:application"]
