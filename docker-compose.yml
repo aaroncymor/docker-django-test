@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   web:
-    image: aaroncymor/mywebsite:1.1
+    image: aaroncymor/mywebsite:1.0
     build: .  
     volumes:
       - web_volume:/opt/services/app/src
@@ -52,8 +52,8 @@ networks:
     driver: overlay
   database1_network:
     driver: overlay
-    #driver_opts:
-    #  encrypted: "true"
+    driver_opts:
+      encrypted: "true"
 
 volumes:
   web_volume:
