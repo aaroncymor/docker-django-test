@@ -2,31 +2,31 @@ version: '3.5'
 
 services:
   web:
-    #image: aaroncymor/freetdsweb:latest
-    build: .   
+    image: aaroncymor/mywebsite:1.0
+    build: .  
     volumes:
-      - .:/opt/services/app/src
+      - web_volume:/opt/services/app/src
     environment:
       REDIS_HOST: redis
       REDIS_PORT: 6379
     networks:
       - nginx_network
       - redis_network
-#      - database1_network
+      - database1_network
     ports:
       - 8000:8000
     depends_on:
-#      - database1
+      - database1
       - redis
 
-#  database1:
-#    image: postgres:10
-#    env_file:
-#      - config/db/database1_env
-#    networks:
-#      - database1_network
-#    volumes:
-#      - database1_volume:/var/lib/postgresql/data
+  database1:
+    image: postgres:10
+    env_file:
+      - config/db/database1_env
+    networks:
+      - database1_network
+    volumes:
+      - database1_volume:/var/lib/postgresql/data
 
 
   redis:
@@ -47,11 +47,14 @@ services:
 
 networks:
   nginx_network:
-    driver: bridge
+    driver: overlay
   redis_network:
-    driver: bridge
-#  database1_network:
-#    driver: bridge
+    driver: overlay
+  database1_network:
+    driver: overlay
+    driver_opts:
+      encrypted: "true"
 
-#volumes:
-#  database1_volume:
+volumes:
+  web_volume:
+  database1_volume:

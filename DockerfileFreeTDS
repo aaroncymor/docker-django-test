@@ -1,0 +1,45 @@
+# start an official image
+FROM python:3.7-stretch
+
+ENV PYTHONBUFFERED 1
+
+RUN apt-get update && apt-get install -y \
+    unixodbc-dev \
+    unixodbc-bin \
+    unixodbc \
+    tdsodbc
+
+# Because django-pyodbc-azure 2.X requires at least TDS protocol
+# 7.3 (or later versions), it does not support legacy datetime
+# type anymore. Remove FreeTDS version 4.2 using below command.
+# reference: https://assist-software.net/snippets/integrating-mssql-server-django-207-and-python-365-using-ubuntu-18-local-environment
+RUN apt-get autoremove freetds-dev freetds-bin
+
+# Install latest version of FreeTDS
+RUN apt-get install wget
+RUN apt-get install build-essential
+RUN apt-get install libc6-dev
+
+# Change version of FreeTDS
+COPY ./setup /tmp/
+RUN cd /tmp/ && \
+    tar -xzf freetds-1.00.92.tar.gz && \
+    cd freetds-1.00.92 && \
+    ./configure --prefix=/usr/local --with-tdsver=7.3 && \
+    make && make install
+
+# Copy odbcinst.ini and odbc.ini to /etc/
+COPY ./config/freetds/odbc /etc/
+COPY ./config/freetds/freetds.conf /etc/freetds.conf
+
+# arbitrary location choice: you can change the directory
+RUN mkdir -p /opt/services/app/src
+
+ADD . /opt/services/app/src
+WORKDIR /opt/services/app/src
+
+# install our dependencies
+COPY ./requirements.txt /tmp/
+RUN pip install -r /tmp/requirements.txt
+
+CMD ["sh", "-c", "gunicorn --bind :8000 djangoproj.wsgi:application"]

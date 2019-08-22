@@ -75,19 +75,35 @@ WSGI_APPLICATION = 'djangoproj.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# FREETDS DB OPTIONS
+#DB_OPTIONS = {
+#    'driver': 'FreeTDS',
+#    'unicode_results': True,
+#    'host_is_server': True,
+#    'extra_params': 'tds_version=8.0;',
+#}
+
+# ODBC DB OPTIONS
+DB_OPTIONS = {
+    'driver': 'ODBC Driver 17 for SQL Server'
+}
+
 DATABASES = {
     'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'database1',
-        'USER': 'database1_role',
-        'PASSWORD': 'database1_password',
-        'HOST': 'database1',
-        'PORT': '5432',
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'sql_server.pyodbc',
+        'NAME': 'dockerEnfisDB',
+        'HOST': '192.168.1.79',
+        'PORT': '1433',
+        'USER': 'aaroncymor',
+        'PASSWORD': 'password',
+        'OPTIONS': DB_OPTIONS,
     }
 }
 
+# set this to False if you want to turn off pyodbc's connection pooling
+DATABASE_CONNECTION_POOLING = False
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators

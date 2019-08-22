@@ -11,5 +11,6 @@ def homepage(request):
     food = Food.objects.all()
     count = redis.incr('hits')
     context = {'count': count, 'food': food}
+    #context = {'count': count }
     return render(request, 'app/home.html', context)
     
